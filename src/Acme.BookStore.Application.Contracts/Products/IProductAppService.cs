@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Application.Dtos;
+using System;
 
 namespace Acme.BookStore.Products
 {
@@ -10,5 +11,7 @@ namespace Acme.BookStore.Products
 
 		Task CreateAsync(CreateUpdateProductDto input);
 		Task<ListResultDto<CategoryLookupDto>> GetCategoriesAsync();
+		Task<ProductDto> GetAsync(Guid id);
+		Task UpdateAsync(Guid id, CreateUpdateProductDto input);
 	}
 }

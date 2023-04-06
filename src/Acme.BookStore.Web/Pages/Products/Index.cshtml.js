@@ -13,6 +13,19 @@ $(function () {
             columnDefs: [
                 /* TODO: Column definitions */
                 {
+                    title: l('Actions'),
+                    rowAction: {
+                        items: [
+                            {
+                                text: l('Edit'),
+                                action: function (data) {
+                                    editModal.open({ id: data.record.id });
+                                },
+                            },
+                        ],
+                    },
+                },
+                {
                     title: l('Name'),
                     data: 'name',
                 },
@@ -50,5 +63,12 @@ $(function () {
     $('#NewProductButton').click(function (e) {
         e.preventDefault();
         createModal.open();
+    });
+
+    var editModal = new abp.ModalManager(
+        abp.appPath + 'Products/EditProductModal'
+    );
+    editModal.onResult(function () {
+        dataTable.ajax.reload();
     });
 });

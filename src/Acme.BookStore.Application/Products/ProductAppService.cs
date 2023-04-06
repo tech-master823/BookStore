@@ -14,7 +14,7 @@ namespace Acme.BookStore.Products
 		private readonly IRepository<Product, Guid> _productRespository;
 		private readonly IRepository<Category, Guid> _categoryRespository;
 
-		public ProductAppService(IRepository<Product, Guid> productRespository, 
+		public ProductAppService(IRepository<Product, Guid> productRespository,
 			IRepository<Category, Guid> categoryRespository)
 		{
 			_productRespository = productRespository;
@@ -39,17 +39,34 @@ namespace Acme.BookStore.Products
 		}
 
 
-		public async Task CreateAsync(CreateUpdateProductDto input){
+		public async Task CreateAsync(CreateUpdateProductDto input)
+		{
 			await _productRespository.InsertAsync(
 				ObjectMapper.Map<CreateUpdateProductDto, Product>(input)
 			);
 		}
 
-		public async Task<ListResultDto<CategoryLookupDto>> GetCategoriesAsync(){
+		public async Task<ListResultDto<CategoryLookupDto>> GetCategoriesAsync()
+		{
 			var categories = await _categoryRespository.GetListAsync();
 			return new ListResultDto<CategoryLookupDto>(
 				ObjectMapper.Map<List<Category>, List<CategoryLookupDto>>(categories)
 			);
+		}
+		// The GetAsync method uses productRepository.GetAsync to get the product
+		// from the database and returns it by mapping it to a ProductDto object
+		public async Task<ProductDto> GetAsync(Guid id)
+		{
+			return ObjectMapper.Map<Product, ProductDto>(
+			await _productRespository.GetAsync(id)
+			);
+		}
+		// UpdateAsync method gets the product and maps the given input properties to the product's properties.
+		public async Task UpdateAsync(Guid id, CreateUpdateProductDto
+		input)
+		{
+			var product = await _productRespository.GetAsync(id);
+			ObjectMapper.Map(input, product);
 		}
 	}
 }
