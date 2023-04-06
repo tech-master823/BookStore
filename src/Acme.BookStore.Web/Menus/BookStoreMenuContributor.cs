@@ -10,42 +10,46 @@ namespace Acme.BookStore.Web.Menus;
 
 public class BookStoreMenuContributor : IMenuContributor
 {
-    public async Task ConfigureMenuAsync(MenuConfigurationContext context)
-    {
-        if (context.Menu.Name == StandardMenus.Main)
-        {
-            await ConfigureMainMenuAsync(context);
-        }
-    }
+	public async Task ConfigureMenuAsync(MenuConfigurationContext context)
+	{
+		if (context.Menu.Name == StandardMenus.Main)
+		{
+			await ConfigureMainMenuAsync(context);
+		}
+	}
 
-    private Task ConfigureMainMenuAsync(MenuConfigurationContext context)
-    {
-        var administration = context.Menu.GetAdministration();
-        var l = context.GetLocalizer<BookStoreResource>();
+	private Task ConfigureMainMenuAsync(MenuConfigurationContext context)
+	{
+		var administration = context.Menu.GetAdministration();
+		var l = context.GetLocalizer<BookStoreResource>();
 
-        context.Menu.Items.Insert(
-            0,
-            new ApplicationMenuItem(
-                BookStoreMenus.Home,
-                l["Menu:Home"],
-                "~/",
-                icon: "fas fa-home",
-                order: 0
-            )
-        );
+		context.Menu.Items.Insert(
+						0,
+						new ApplicationMenuItem(
+										BookStoreMenus.Home,
+										l["Menu:Home"],
+										"~/",
+										icon: "fas fa-home",
+										order: 0
+						)
+		);
 
-        if (MultiTenancyConsts.IsEnabled)
-        {
-            administration.SetSubItemOrder(TenantManagementMenuNames.GroupName, 1);
-        }
-        else
-        {
-            administration.TryRemoveMenuItem(TenantManagementMenuNames.GroupName);
-        }
+		if (MultiTenancyConsts.IsEnabled)
+		{
+			administration.SetSubItemOrder(TenantManagementMenuNames.GroupName, 1);
+		}
+		else
+		{
+			administration.TryRemoveMenuItem(TenantManagementMenuNames.GroupName);
+		}
 
-        administration.SetSubItemOrder(IdentityMenuNames.GroupName, 2);
-        administration.SetSubItemOrder(SettingManagementMenuNames.GroupName, 3);
+		administration.SetSubItemOrder(IdentityMenuNames.GroupName, 2);
+		administration.SetSubItemOrder(SettingManagementMenuNames.GroupName, 3);
 
-        return Task.CompletedTask;
-    }
+		context.Menu.AddItem(new ApplicationMenuItem("BookStore", l["Menu:BookStore"], icon: "fas fa-shopping-cart").AddItem(new ApplicationMenuItem("BookStore.Books", l["Menu:Books"], url: "/Products")
+						)
+		);
+		return Task.CompletedTask;
+
+	}
 }
