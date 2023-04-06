@@ -22,6 +22,25 @@ $(function () {
                                     editModal.open({ id: data.record.id });
                                 },
                             },
+                            {
+                                text: l('Delete'),
+                                confirmMessage: function (data) {
+                                    return l(
+                                        'ProductDeletionConfirmationMessage',
+                                        data.record.name
+                                    );
+                                },
+                                action: function (data) {
+                                    acme.bookStore.products.product
+                                        .delete(data.record.id)
+                                        .then(function () {
+                                            abp.notify.info(
+                                                l('SuccessfullyDeleted')
+                                            );
+                                            dataTable.ajax.reload();
+                                        });
+                                },
+                            },
                         ],
                     },
                 },

@@ -68,5 +68,9 @@ namespace Acme.BookStore.Products
 			var product = await _productRespository.GetAsync(id);
 			ObjectMapper.Map(input, product);
 		}
+		public async Task DeleteAsync(Guid id)
+		{
+			await _productRespository.DeleteAsync(id);
+		}
 	}
 }
