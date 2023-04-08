@@ -1,1 +1,2 @@
 # BookStore
+## Manage sales
